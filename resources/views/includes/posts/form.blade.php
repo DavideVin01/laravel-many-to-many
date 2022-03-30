@@ -60,6 +60,19 @@
                 <div class="col-1 mt-1">
                     <img src="https://banksiafdn.com/wp-content/uploads/2019/10/placeholde-image.jpg" alt="Image" width="65" height="60" id="preview">
                 </div>
+                <div class="tags @error ('tags') is-invalid @enderror">
+                    @foreach($tags as $tag)
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="tag-{{ $tag->id }}" value="{{ $tag->id }}" name="tags[]" @if (in_array($tag->id, old('tags', $post_tags_ids ?? []))) checked @endif>
+                        <label class="form-check-label" for="tag-{{ $tag->id }}">{{ $tag->label }}</label>
+                    </div>
+                    @endforeach
+                </div>
+                @error('tags')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
             </div>
             <hr>
             <div class="col-12 d-flex justify-content-end">

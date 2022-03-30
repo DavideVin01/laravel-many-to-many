@@ -16,7 +16,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Title</th>
                         <th scope="col">Category</th>
-                        <th scope="col">Created at</th>
+                        <th scope="col">Tags</th>
                         <th scope="col">Updated at</th>
                         <th scope="col"></th>
                     </tr>
@@ -27,7 +27,12 @@
                             <th scope="row">{{ $post->id }}</th>
                             <td>{{ $post->title }}</td>
                             <td><span class="badge badge-pill badge-{{ $post->category->color ?? 'secondary' }} shadow-sm pt-1 text-uppercase px-3 w-75">{!! $post->category->label ?? '<i class="fa-solid fa-times"></i>' !!}</span></td>
-                            <td>{{ $post->created_at }}</td>
+                            <td width="200">
+                                @forelse ($post->tags as $tag)
+                                <span class="badge shadow-sm pt-1 px-2" style="background-color: {{ $tag->color }}">{{ $tag->label }}</span>
+                                @empty -
+                                @endforelse
+                            </td>
                             <td>{{ $post->updated_at }}</td>
                             <td>
                                 <div class="d-flex">
