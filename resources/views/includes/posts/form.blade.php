@@ -60,7 +60,8 @@
                 <div class="col-1 mt-1">
                     <img src="https://banksiafdn.com/wp-content/uploads/2019/10/placeholde-image.jpg" alt="Image" width="65" height="60" id="preview">
                 </div>
-                <div class="tags @error ('tags') is-invalid @enderror">
+                <div class="col-12 tags @error ('tags') is-invalid @enderror">
+                    <span class="mr-3">Choose tags:</span>
                     @foreach($tags as $tag)
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="tag-{{ $tag->id }}" value="{{ $tag->id }}" name="tags[]" @if (in_array($tag->id, old('tags', $post_tags_ids ?? []))) checked @endif>

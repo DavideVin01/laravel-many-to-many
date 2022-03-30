@@ -1,18 +1,21 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center">
-        <header>
-            <h1>Post #{{ $post->id }}</h1>
-        </header>
+    <header class="d-flex justify-content-between align-items-center">
         <div>
-            
+            <h1>Post #{{ $post->id }}</h1>
+            @forelse($post->tags as $tag)
+            <span class="badge shadow-sm pt-1 px-2" style="background-color: {{ $tag->color }}">{{ $tag->label }}</span>
+            @empty -
+            @endforelse
+        </div>
+        <div>
             <div><strong>Slug - </strong>{{ $post->slug }}</div>
             <div class="d-flex justify-content-end">
-                <span class="badge badge-pill badge-{{ $post->category->color ?? 'secondary' }} shadow-sm pt-1 text-uppercase px-3 w-100 mt-3">{!! $post->category->label ?? '<i class="fa-solid fa-times"></i>' !!}</span>
+                <span class="badge badge-pill badge-{{ $post->category->color ?? 'secondary' }} shadow-sm pt-1 text-uppercase px-3 w-100 mt-3 mb-0">{!! $post->category->label ?? '<i class="fa-solid fa-times"></i>' !!}</span>
             </div>
         </div>
-    </div>
+    </header>
     @include('includes.posts.alert')
     <hr>
     <div class="row">
