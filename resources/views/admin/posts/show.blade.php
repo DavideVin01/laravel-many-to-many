@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-4 mt-5">
             <div class="shadow">
-                <img class="img-fluid" src="{{ $post->image }}" alt="Image">
+                <img class="img-fluid" src="{{ asset('storage/' . $post->image) }}" alt="Image">
             </div>
             <div class="col-12 d-flex mt-5">
 

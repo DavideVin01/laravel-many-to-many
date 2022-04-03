@@ -12,7 +12,7 @@
 @if($post->exists)
     <h1 class="pb-3"><strong>EDIT POST</strong></h1>
     <hr>
-    <form action="{{route('admin.posts.update', $post->id)}}" method="POST" novalidate>
+    <form action="{{route('admin.posts.update', $post->id)}}" method="POST" enctype="multipart/form-data" novalidate>
         @method('PUT')
         @else
         <h1 class="pb-3"><strong>CREATE POST</strong></h1>
@@ -53,12 +53,20 @@
                 </div>
                 <div class="col-11">
                     <div class="mb-4">
-                        <label for="image" class="form-label">Image URL</label>
-                        <input type="url" class="form-control" id="image" name="image" placeholder="Insert Image URL" value="{{ old('image', $post->image) }}">
+                        <input type="file" class="form-control-file @error('image') is-invalid @enderror" id="image" name="image">
+                        @error('image')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
                     </div>
                 </div>
                 <div class="col-1 mt-1">
-                    <img src="https://banksiafdn.com/wp-content/uploads/2019/10/placeholde-image.jpg" alt="Image" width="65" height="60" id="preview">
+                    @if($post->image)
+                    <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->slug }}" width="65" height="60" id="preview">
+                    @else
+                    <img src="https://banksiafdn.com/wp-content/uploads/2019/10/placeholde-image.jpg" alt="Preview" width="65" height="60" id="preview">
+                    @endif
                 </div>
                 <div class="col-12 tags @error ('tags') is-invalid @enderror">
                     <span class="mr-3">Choose tags:</span>
@@ -91,8 +99,14 @@
         const imagePreview = document.getElementById('preview');
 
         imageInput.addEventListener('change', e => {
-            const preview = imageInput.value ?? placeholder;
-            imagePreview.setAttribute('src', preview)
+            if (imageInput.files && imageInput.files[0]){
+                let reader = new FileReader();
+                reader.readAsDataURL(imageInput.files[0]);
+
+                reader.onload = e => {
+                    imagePreview.setAttribute('src', e.target.result);
+                }
+            } else imagePreview.setAttribute('src', placeholder);
         });
     </script>
 @endsection
