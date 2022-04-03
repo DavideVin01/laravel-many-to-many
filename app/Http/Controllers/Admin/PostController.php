@@ -112,13 +112,21 @@ class PostController extends Controller
         $request->validate([
             'title' => ['required', 'string', Rule::unique('posts')->ignore($post->id), 'min:5', 'max:50'],
             'content' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image',
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|exists:tags,id',
         ]);
 
         $data = $request->all();
         $data['slug'] = Str::slug($request->title, '-');
+
+        if (array_key_exists('image', $data)){
+            if($post->image) Storage::delete($post->image);
+
+            $img_url = Storage::put('post_images', $data['image']);
+            $data['image'] = $img_url;
+        }
+
         $post->update($data);
 
         if (!array_key_exists('tags', $data)) $post->tags()->detach();
