@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -58,6 +59,12 @@ class PostController extends Controller
         $data['slug'] = Str::slug($request->title, '-');
 
         $post = new Post();
+
+        if (array_key_exists('image', $data)){
+            $img_url = Storage::put('post_images', $data['image']);
+            $data['image'] = $img_url;
+        }
+
         $post->fill($data);
         $post->save();
 

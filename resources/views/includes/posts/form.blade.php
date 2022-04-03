@@ -18,7 +18,7 @@
         <h1 class="pb-3"><strong>CREATE POST</strong></h1>
         <hr>
 
-        <form action="{{ route('admin.posts.store') }}" method="POST" novalidate>
+        <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data" novalidate>
             @endif
             @csrf
             <div class="row">
