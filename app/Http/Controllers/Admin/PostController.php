@@ -9,7 +9,10 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PostCreatedMail;
 
 class PostController extends Controller
 {
@@ -56,6 +59,7 @@ class PostController extends Controller
         ]);
 
         $data = $request->all();
+        $user = Auth::user();
         $data['slug'] = Str::slug($request->title, '-');
 
         $post = new Post();
@@ -66,9 +70,15 @@ class PostController extends Controller
         }
 
         $post->fill($data);
+
         $post->save();
 
+        // Dopo aver creato il post, aggancio eventuali tag
         if (array_key_exists('tags', $data)) $post->tags()->attach($data['tags']);
+
+        // Mando una mail di conferma
+        $mail = new PostCreatedMail($post);
+        Mail::to($user->email)->send($mail);
 
         return redirect()->route('admin.posts.show', $post->id);
     }
